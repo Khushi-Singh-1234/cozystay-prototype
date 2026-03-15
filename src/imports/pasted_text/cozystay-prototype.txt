@@ -1,0 +1,131 @@
+Create a high-fidelity clickable prototype for a web-based hotel reservation system called "COZYSTAY".
+
+The prototype must strictly follow the modules defined in the Software Requirement Specification (SRS) and Structure Chart.
+
+System Purpose
+A hotel reservation web application where customers can search hotels, view room availability, book rooms, amend bookings, cancel bookings, and where administrators can manage room information.
+
+Target Users
+1. Customer (Guest)
+2. Admin (Hotel Manager)
+
+Design Style
+Modern hotel booking website similar to Booking.com or Airbnb.
+Clean UI with white background, soft blue/beige accent colors, hotel images, card layouts, and clear navigation.
+Desktop web interface.
+
+Main Screens to Include
+
+1. Login / Registration Module
+Screens:
+• Login page (User ID and Password)
+• Registration page (Name, Address, Contact No, User ID, Password)
+• Home page after login
+
+Home Page Components:
+• System logo "COZYSTAY"
+• Navigation menu
+• Search hotel option
+• My bookings option
+• Profile option
+
+2. Hotel Room Search & Booking Module
+Screens:
+• Hotel search page
+
+Search Filters:
+• Location / Place
+• Check-in date
+• Check-out date
+• Hotel type
+• Ratings
+• Price range
+
+Search Results Page:
+Display hotel cards containing:
+• Hotel name
+• Location
+• Room type
+• Amenities (WiFi, TV, Geyser, AC)
+• Price per night
+• Rating
+• "Book Room" button
+
+Room Details Page:
+• Room images
+• Room description
+• Amenities
+• Price
+• Select number of rooms
+
+Booking Process Screens:
+• Guest details form
+   - Name
+   - Age
+   - Gender
+   - ID proof
+   - Contact number
+   - Email
+• Payment page
+
+Payment Methods:
+• Credit Card
+• Debit Card
+• UPI (QR code)
+
+Booking Confirmation Screen:
+• Unique Booking ID
+• Booking summary
+• Download receipt button
+
+3. Booking Amendment Module
+Screens:
+• My Bookings page (list of bookings)
+• Booking details page
+
+Amendment Options:
+• Change check-in/check-out date
+• Change room type
+• Add or remove rooms
+• Update guest details
+
+System should display:
+• Updated price
+• Additional payment or refund
+
+4. Booking Cancellation Module
+Screens:
+• Booking list
+• Cancel booking confirmation page
+
+Features:
+• Display cancellation policy
+• Show refundable amount
+• Confirm cancellation
+• Refund processing message
+
+5. Room Maintenance Module (Admin Panel)
+
+Admin Dashboard Screens:
+• Admin login
+• Dashboard overview
+
+Room Management Pages:
+• Add room
+• Update room
+• Delete room
+
+Room fields:
+• Hotel name
+• Room type
+• Amenities
+• Price
+• Availability status
+
+Prototype Requirements
+• 12–15 interconnected UI screens
+• Navigation between screens
+• Use realistic hotel images
+• Use cards, forms, tables, and dashboards
+• Show booking flow from search → booking → payment → confirmation
+• Include admin panel flow
