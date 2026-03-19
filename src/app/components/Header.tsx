@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router';
 import { Hotel, Search, BookMarked, User, LogOut } from 'lucide-react';
+import { logout } from '../utils/auth';
 
 export function Header() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    logout();
     navigate('/');
   };
 

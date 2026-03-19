@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Hotel, ArrowLeft } from 'lucide-react';
+import { Alert } from '../components/ui/alert';
+import { registerUser } from '../utils/auth';
 
 export function Register() {
   const navigate = useNavigate();
@@ -12,6 +14,7 @@ export function Register() {
     password: '',
     confirmPassword: '',
   });
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -22,11 +25,27 @@ export function Register() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match!');
+      setError('Passwords do not match.');
       return;
     }
-    // Mock registration
+
+    const result = registerUser({
+      id: formData.userId.trim(),
+      name: formData.name.trim(),
+      email: '',
+      phone: formData.contact.trim(),
+      address: formData.address.trim(),
+      password: formData.password,
+    });
+
+    if (!result.success) {
+      setError(result.error);
+      return;
+    }
+
     navigate('/');
   };
 
@@ -54,6 +73,12 @@ export function Register() {
           <h2 className="text-3xl font-semibold text-center text-gray-800 mb-8">
             Create Account
           </h2>
+
+          {error ? (
+            <Alert variant="destructive" className="mb-4">
+              <p>{error}</p>
+            </Alert>
+          ) : null}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>

@@ -1,18 +1,27 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Hotel, Shield, ArrowLeft } from 'lucide-react';
+import { Alert } from '../../components/ui/alert';
 
 export function AdminLogin() {
   const navigate = useNavigate();
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock authentication
-    if (userId && password) {
-      navigate('/admin/dashboard');
+    setError(null);
+
+    const adminUser = "admin";
+    const adminPassword = "admin123";
+
+    if (userId.trim().toLowerCase() !== adminUser || password !== adminPassword) {
+      setError('Invalid admin credentials.');
+      return;
     }
+
+    navigate('/admin/dashboard');
   };
 
   return (
@@ -42,6 +51,12 @@ export function AdminLogin() {
           <p className="text-center text-gray-600 mb-6">
             Hotel Management System
           </p>
+
+          {error ? (
+            <Alert variant="destructive" className="mb-4">
+              <p>{error}</p>
+            </Alert>
+          ) : null}
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>

@@ -1,11 +1,17 @@
 import { useState } from 'react';
 import { Header } from '../components/Header';
-import { mockUser } from '../data/mockData';
+import { getCurrentUser, updateUser } from '../utils/auth';
 import { User, Mail, Phone, MapPin, Edit2, Save } from 'lucide-react';
 
 export function Profile() {
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState(mockUser);
+  const [formData, setFormData] = useState<User>(() => getCurrentUser() ?? {
+    id: 'user1',
+    name: 'John Doe',
+    email: 'john.doe@email.com',
+    phone: '+1 234 567 8900',
+    address: '123 Main Street, New York, NY 10001',
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -16,7 +22,12 @@ export function Profile() {
 
   const handleSave = () => {
     setIsEditing(false);
-    alert('Profile updated successfully!');
+    const updated = updateUser(formData);
+    if (updated) {
+      alert('Profile updated successfully!');
+    } else {
+      alert('Unable to save profile. Please try again.');
+    }
   };
 
   return (

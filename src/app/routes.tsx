@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, redirect } from "react-router";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Home } from "./pages/Home";
@@ -17,6 +17,9 @@ import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import { AddRoom } from "./pages/admin/AddRoom";
 import { UpdateRoom } from "./pages/admin/UpdateRoom";
 import { NotFound } from "./pages/NotFound";
+import { isAuthenticated } from "./utils/auth";
+
+const requireAuth = () => (isAuthenticated() ? null : redirect("/"));
 
 export const router = createBrowserRouter([
   {
@@ -29,46 +32,57 @@ export const router = createBrowserRouter([
   },
   {
     path: "/home",
+    loader: requireAuth,
     Component: Home,
   },
   {
     path: "/search",
+    loader: requireAuth,
     Component: Search,
   },
   {
     path: "/hotel/:id",
+    loader: requireAuth,
     Component: HotelDetails,
   },
   {
     path: "/booking/:hotelId",
+    loader: requireAuth,
     Component: BookingForm,
   },
   {
     path: "/payment/:bookingId",
+    loader: requireAuth,
     Component: Payment,
   },
   {
     path: "/confirmation/:bookingId",
+    loader: requireAuth,
     Component: BookingConfirmation,
   },
   {
     path: "/my-bookings",
+    loader: requireAuth,
     Component: MyBookings,
   },
   {
     path: "/booking-details/:bookingId",
+    loader: requireAuth,
     Component: BookingDetails,
   },
   {
     path: "/amend-booking/:bookingId",
+    loader: requireAuth,
     Component: AmendBooking,
   },
   {
     path: "/cancel-booking/:bookingId",
+    loader: requireAuth,
     Component: CancelBooking,
   },
   {
     path: "/profile",
+    loader: requireAuth,
     Component: Profile,
   },
   {

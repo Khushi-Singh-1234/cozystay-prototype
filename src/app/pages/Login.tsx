@@ -1,18 +1,32 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Hotel, KeyRound } from 'lucide-react';
+import { Alert } from '../components/ui/alert';
+import { authenticateUser, getCurrentUser } from '../utils/auth';
 
 export function Login() {
   const navigate = useNavigate();
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (getCurrentUser()) {
+      navigate('/home');
+    }
+  }, [navigate]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock authentication
-    if (userId && password) {
-      navigate('/home');
+
+    const result = authenticateUser(userId.trim(), password);
+    if (!result.success) {
+      setError(result.error);
+      return;
     }
+
+    setError(null);
+    navigate('/home');
   };
 
   return (
@@ -30,6 +44,12 @@ export function Login() {
           <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
             Welcome Back
           </h2>
+
+          {error ? (
+            <Alert variant="destructive" className="mb-4">
+              <p>{error}</p>
+            </Alert>
+          ) : null}
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
