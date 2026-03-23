@@ -154,3 +154,60 @@ export const mockBookings: Booking[] = [
     paymentMethod: 'Credit Card',
   },
 ];
+
+const HOTELS_STORAGE_KEY = 'cozystay:hotels';
+
+export function readHotels(): Hotel[] {
+  if (typeof window === 'undefined') return mockHotels;
+
+  try {
+    const raw = localStorage.getItem(HOTELS_STORAGE_KEY);
+    if (!raw) return mockHotels;
+
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return mockHotels;
+
+    return parsed;
+  } catch {
+    return mockHotels;
+  }
+}
+
+export function writeHotels(hotels: Hotel[]) {
+  if (typeof window === 'undefined') return;
+
+  try {
+    localStorage.setItem(HOTELS_STORAGE_KEY, JSON.stringify(hotels));
+  } catch {
+    // ignore quota errors
+  }
+}
+
+export function getHotelById(id: string): Hotel | undefined {
+  return readHotels().find((h) => h.id === id);
+}
+
+export function addHotel(newHotel: Hotel) {
+  const hotels = readHotels();
+  const updated = [...hotels, newHotel];
+  writeHotels(updated);
+}
+
+export function updateHotel(updatedHotel: Hotel): boolean {
+  const hotels = readHotels();
+  const idx = hotels.findIndex((h) => h.id === updatedHotel.id);
+  if (idx === -1) return false;
+
+  hotels[idx] = updatedHotel;
+  writeHotels(hotels);
+  return true;
+}
+
+export function deleteHotel(id: string): boolean {
+  const hotels = readHotels();
+  const exists = hotels.some((h) => h.id === id);
+  if (!exists) return false;
+
+  writeHotels(hotels.filter((h) => h.id !== id));
+  return true;
+}

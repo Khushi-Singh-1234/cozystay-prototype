@@ -1,12 +1,19 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Header } from '../components/Header';
 import { Search, Star, MapPin, TrendingUp } from 'lucide-react';
-import { mockHotels } from '../data/mockData';
+import type { Hotel } from '../data/mockData';
+import { readHotels } from '../data/mockData';
 
 export function Home() {
   const navigate = useNavigate();
+  const [hotels, setHotels] = useState<Hotel[]>([]);
 
-  const featuredHotels = mockHotels.slice(0, 3);
+  useEffect(() => {
+    setHotels(readHotels());
+  }, []);
+
+  const featuredHotels = hotels.slice(0, 3);
 
   return (
     <div className="min-h-screen bg-gray-50">

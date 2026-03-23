@@ -1,17 +1,29 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { mockHotels } from '../../data/mockData';
-import { Hotel, Plus, Edit, Trash2, LogOut, Users, DollarSign, Star, TrendingUp } from 'lucide-react';
+import type { Hotel } from '../../data/mockData';
+import { readHotels, deleteHotel } from '../../data/mockData';
+import { Hotel as HotelIcon, Plus, Edit, Trash2, LogOut, Users, DollarSign, Star, TrendingUp } from 'lucide-react';
 
 export function AdminDashboard() {
   const navigate = useNavigate();
+  const [hotels, setHotels] = useState<Hotel[]>([]);
 
-  const totalRooms = mockHotels.reduce((sum, hotel) => sum + hotel.availableRooms, 0);
-  const totalRevenue = mockHotels.reduce((sum, hotel) => sum + hotel.pricePerNight * hotel.availableRooms, 0);
-  const averageRating = (mockHotels.reduce((sum, hotel) => sum + hotel.rating, 0) / mockHotels.length).toFixed(1);
+  useEffect(() => {
+    setHotels(readHotels());
+  }, []);
+
+  const totalRooms = hotels.reduce((sum, hotel) => sum + hotel.availableRooms, 0);
+  const totalRevenue = hotels.reduce((sum, hotel) => sum + hotel.pricePerNight * hotel.availableRooms, 0);
+  const averageRating = hotels.length > 0 ? (hotels.reduce((sum, hotel) => sum + hotel.rating, 0) / hotels.length).toFixed(1) : '0.0';
 
   const handleDelete = (hotelId: string) => {
     if (confirm('Are you sure you want to delete this room?')) {
-      alert('Room deleted successfully!');
+      if (deleteHotel(hotelId)) {
+        setHotels((prev) => prev.filter((h) => h.id !== hotelId));
+        alert('Room deleted successfully!');
+      } else {
+        alert('Failed to delete room.');
+      }
     }
   };
 
@@ -23,7 +35,7 @@ export function AdminDashboard() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-2">
               <div className="bg-white p-2 rounded-lg">
-                <Hotel className="w-6 h-6 text-slate-800" />
+                <HotelIcon className="w-6 h-6 text-slate-800" />
               </div>
               <span className="text-2xl font-bold">COZYSTAY Admin</span>
             </div>
@@ -46,10 +58,10 @@ export function AdminDashboard() {
           <div className="bg-white rounded-xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-2">
               <div className="bg-blue-100 p-3 rounded-lg">
-                <Hotel className="w-6 h-6 text-blue-600" />
+                <HotelIcon className="w-6 h-6 text-blue-600" />
               </div>
             </div>
-            <div className="text-3xl font-bold text-gray-900 mb-1">{mockHotels.length}</div>
+            <div className="text-3xl font-bold text-gray-900 mb-1">{hotels.length}</div>
             <div className="text-sm text-gray-600">Total Hotels</div>
           </div>
 
@@ -112,7 +124,7 @@ export function AdminDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {mockHotels.map((hotel) => (
+                {hotels.map((hotel) => (
                   <tr key={hotel.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div className="font-medium text-gray-900">{hotel.name}</div>

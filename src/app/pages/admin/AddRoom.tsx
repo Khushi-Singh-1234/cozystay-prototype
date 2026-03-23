@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Hotel, ArrowLeft } from 'lucide-react';
+import type { Hotel } from '../../data/mockData';
+import { addHotel } from '../../data/mockData';
+import { Hotel as HotelIcon, ArrowLeft } from 'lucide-react';
 
 export function AddRoom() {
   const navigate = useNavigate();
@@ -40,6 +42,22 @@ export function AddRoom() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const newHotel: Hotel = {
+      id: Date.now().toString(),
+      name: formData.hotelName,
+      location: formData.location,
+      roomType: formData.roomType,
+      amenities: formData.amenities,
+      pricePerNight: Number(formData.price),
+      rating: 4.0,
+      image: 'https://images.unsplash.com/photo-1609520934787-b6b2bffdbb55?auto=format&fit=crop&w=1200&q=80',
+      description: formData.description,
+      hotelType: formData.hotelType,
+      availableRooms: Number(formData.availableRooms),
+    };
+
+    addHotel(newHotel);
     alert('Room added successfully!');
     navigate('/admin/dashboard');
   };
@@ -52,7 +70,7 @@ export function AddRoom() {
           <div className="flex items-center h-16">
             <div className="flex items-center gap-2">
               <div className="bg-white p-2 rounded-lg">
-                <Hotel className="w-6 h-6 text-slate-800" />
+                <HotelIcon className="w-6 h-6 text-slate-800" />
               </div>
               <span className="text-2xl font-bold">COZYSTAY Admin</span>
             </div>

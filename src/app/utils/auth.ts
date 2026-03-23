@@ -75,6 +75,16 @@ export function authenticateUser(
   return { success: true, user: rest };
 }
 
+export function getPasswordForUser(userId: string): { success: true; password: string } | { success: false; error: string } {
+  const users = readUsers();
+  const user = users.find((u) => u.id.toLowerCase() === userId.toLowerCase());
+  if (!user) {
+    return { success: false, error: "No account found for that User ID." };
+  }
+
+  return { success: true, password: user.password };
+}
+
 export function getCurrentUser(): User | null {
   if (typeof window === "undefined") return null;
   try {

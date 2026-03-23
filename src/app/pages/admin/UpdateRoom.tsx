@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { mockHotels } from '../../data/mockData';
-import { Hotel, ArrowLeft } from 'lucide-react';
+import { getHotelById, updateHotel } from '../../data/mockData';
+import { Hotel as HotelIcon, ArrowLeft } from 'lucide-react';
 
 export function UpdateRoom() {
   const { roomId } = useParams();
   const navigate = useNavigate();
 
-  const hotel = mockHotels.find((h) => h.id === roomId);
+  const hotel = roomId ? getHotelById(roomId) : undefined;
 
   const [formData, setFormData] = useState({
     hotelName: hotel?.name || '',
@@ -45,8 +45,33 @@ export function UpdateRoom() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Room updated successfully!');
-    navigate('/admin/dashboard');
+
+    if (!hotel) {
+      alert('Hotel not found.');
+      return;
+    }
+
+    const updatedHotel: Hotel = {
+      id: hotel.id,
+      name: formData.hotelName,
+      location: formData.location,
+      roomType: formData.roomType,
+      amenities: formData.amenities,
+      pricePerNight: Number(formData.price),
+      rating: hotel.rating,
+      image: hotel.image,
+      description: formData.description,
+      hotelType: formData.hotelType,
+      availableRooms: Number(formData.availableRooms),
+    };
+
+    const success = updateHotel(updatedHotel);
+    if (success) {
+      alert('Room updated successfully!');
+      navigate('/admin/dashboard');
+    } else {
+      alert('Failed to update room.');
+    }
   };
 
   if (!hotel) {
@@ -65,7 +90,7 @@ export function UpdateRoom() {
           <div className="flex items-center h-16">
             <div className="flex items-center gap-2">
               <div className="bg-white p-2 rounded-lg">
-                <Hotel className="w-6 h-6 text-slate-800" />
+                <HotelIcon className="w-6 h-6 text-slate-800" />
               </div>
               <span className="text-2xl font-bold">COZYSTAY Admin</span>
             </div>

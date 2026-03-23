@@ -1,12 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Header } from '../components/Header';
-import { mockHotels } from '../data/mockData';
+import type { Hotel } from '../data/mockData';
+import { readHotels } from '../data/mockData';
 import { Search as SearchIcon, MapPin, Star, Wifi, Tv, Wind, CircleDollarSign } from 'lucide-react';
 
 export function Search() {
   const navigate = useNavigate();
+  const [hotels, setHotels] = useState<Hotel[]>([]);
+
+  useEffect(() => {
+    setHotels(readHotels());
+  }, []);
+
   const [filters, setFilters] = useState({
+
     location: '',
     checkIn: '',
     checkOut: '',
@@ -15,7 +23,7 @@ export function Search() {
     maxPrice: 500,
   });
 
-  const filteredHotels = mockHotels.filter((hotel) => {
+  const filteredHotels = hotels.filter((hotel) => {
     if (filters.location && !hotel.location.toLowerCase().includes(filters.location.toLowerCase())) {
       return false;
     }

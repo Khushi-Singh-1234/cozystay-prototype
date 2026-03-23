@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { Header } from '../components/Header';
-import { mockHotels } from '../data/mockData';
+import { getHotelById } from '../data/mockData';
 import { MapPin, Star, Wifi, Tv, Wind, ArrowLeft } from 'lucide-react';
 
 export function HotelDetails() {
@@ -9,7 +9,7 @@ export function HotelDetails() {
   const navigate = useNavigate();
   const [numberOfRooms, setNumberOfRooms] = useState(1);
 
-  const hotel = mockHotels.find((h) => h.id === id);
+  const hotel = id ? getHotelById(id) : undefined;
 
   if (!hotel) {
     return <div>Hotel not found</div>;

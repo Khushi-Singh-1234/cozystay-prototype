@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Hotel, KeyRound } from 'lucide-react';
 import { Alert } from '../components/ui/alert';
-import { authenticateUser, getCurrentUser } from '../utils/auth';
+import { authenticateUser, getCurrentUser, getPasswordForUser } from '../utils/auth';
 
 export function Login() {
   const navigate = useNavigate();
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -27,6 +28,20 @@ export function Login() {
 
     setError(null);
     navigate('/home');
+  };
+
+  const handleForgotPassword = () => {
+    const enteredUserId = window.prompt('Enter your User ID');
+    if (!enteredUserId) return;
+
+    const userResult = getPasswordForUser(enteredUserId.trim());
+    if (!userResult.success) {
+      setError(userResult.error);
+      return;
+    }
+
+    setError(null);
+    window.alert(`Password for ${enteredUserId.trim()} is: ${userResult.password}`);
   };
 
   return (
@@ -71,15 +86,33 @@ export function Login() {
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                 Password
               </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-                placeholder="Enter your password"
-                required
-              />
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  placeholder="Enter your password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-blue-600 hover:text-blue-800"
+                >
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
+              <div className="mt-2 text-right">
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="text-sm text-blue-600 hover:text-blue-700"
+                >
+                  Forgot password?
+                </button>
+              </div>
             </div>
 
             <button
